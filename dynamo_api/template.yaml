@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform:
+  - AWS::Serverless-2016-10-31
+
+Description: Lambda CloudFormation Lab
+Resources:
+  getUserLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: getUserLambda
+      Handler: user.getUser
+      Runtime: python3.6
+      CodeUri: package/
+      Environment:
+        Variables:
+          USERS_TABLE: !Ref UsersTable
+      Events:
+          GetUsers:
+            Type: Api
+            Properties:
+              RestApiId: !Ref usersAPI
+              Path: /user
+              Method: GET
+      
+  putUserLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: putUserLambda
+      Handler: user.putUser
+      Runtime: python3.6
+      CodeUri: package/
+      Environment:
+        Variables:
+          USERS_TABLE: !Ref UsersTable
+      Events:
+        PutUsers:
+          Type: Api
+          Properties:
+            RestApiId: !Ref usersAPI
+            Path: /user
+            Method: PUT        
+      
+      
+# MyTable:
+#     Type: AWS::Serverless::SimpleTable
+#     Properties:
+#       PrimaryKey:
+#         Name: pk
+#         Type: String
+#       ProvisionedThroughput:
+#         ReadCapacityUnits: 5
+#         WriteCapacityUnits: 5
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: user-table
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+        - AttributeName: age
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+        - AttributeName: age
+          AttributeType: N
+  
+  usersAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: usersGateway
+      StageName: prod
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: swagger.yaml
+      
+
+
