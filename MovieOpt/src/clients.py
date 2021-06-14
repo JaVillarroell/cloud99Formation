@@ -16,7 +16,7 @@ def getClientMovies(event, context):
   items = response['Items']
   print(items)
   return {
-      'status code': 200,
+      'statusCode': 200,
       'body': json.dumps(items)
   }
 def putClients(event, context):
@@ -32,7 +32,7 @@ def putClients(event, context):
         'sk':'information'
       })
     availableSeats = room['Item']['AvailableSeats']
-    if len(bodyObj["Clients"]) > availableSeats :
+    if len(bodyObj["Clients"]) > int(availableSeats) :
       response = "Too many people too little seats :( "
       print(response)
     else:
@@ -46,11 +46,11 @@ def putClients(event, context):
         Item = {
             'pk':"room_" + roomID + "_" + date,
             'sk':'information',
-            'AvailableSeats' : availableSeats - len(bodyObj["Clients"]),
+            'AvailableSeats' : int(availableSeats) - len(bodyObj["Clients"]),
             '3D' :room['Item']['3D']
         })
       response = "success"
       print(response)
     return {
-        'status code': 200,
+        'statusCode': 200,
         'body': json.dumps(response)}

@@ -18,6 +18,6 @@ def getRoom(event, context):
   item = response['Item']
   print(item)
   return {
-      'status code': 200,
+      'statusCode': 200,
       'body': json.dumps(item)
   }

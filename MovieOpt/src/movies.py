@@ -19,7 +19,7 @@ def getMovie(event, context):
         })
     item = response['Item']
     return {
-        'status code': 200,
+        'statusCode': 200,
         'body': json.dumps(item)
     }
 def getRoomsSchedule(event, context):
@@ -46,7 +46,7 @@ def getClients(event, context):
     items = response['Items']
     print(items)
     return {
-        'status code': 200,
+        'statusCode': 200,
         'body': json.dumps(items)
     }
 def putMovieInfo(event, context):
@@ -62,6 +62,6 @@ def putMovieInfo(event, context):
             'Year' : bodyObj['Year'],
         })
     return {
-        'status code': 200,
+        'statusCode': 200,
         'body': json.dumps("success")}
 

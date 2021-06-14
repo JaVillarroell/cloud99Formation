@@ -141,6 +141,8 @@ Resources:
       Runtime: python3.6
       CodeUri: package/
       Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref MovieTheaterTable
         - DynamoDBWritePolicy:
             TableName: !Ref MovieTheaterTable
       Environment:
